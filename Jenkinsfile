@@ -25,13 +25,21 @@ pipeline{
             }
         }
         
-        stage('Push image to Hub'){
+        stage('Push image to Docker Hub'){
             steps{
                 script{
                     withDockerRegistry(url:'https://registry.hub.docker.com', credentialsId: 'my_dockerhub_token') {
                          bat 'echo %DOCKERHUB_PAT% | docker login -u dieng940 -p dckr_pat_EWBJldil3i7qLwoqTh33SG77pso'
                          bat 'docker push dieng940/devops-integration'
                     }
+                }
+            }
+        }
+
+        stage('Deploy App'){
+            steps{
+                script{
+                    bat 'docker run -p 8082:8080 dieng940/devops-integration'
                 }
             }
         }
